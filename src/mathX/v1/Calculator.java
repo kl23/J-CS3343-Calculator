@@ -9,46 +9,46 @@ public class Calculator {
 		// register algorithms
 		this.registerOperator('+', "add", 1, new IAlgorithm() {
 			@Override
-			public double calc(Iterator<IMathExp> stack, IMathExp... param)
+			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return param[0].calc(stack) + param[1].calc(stack); 
+				return param[0] + param[1]; 
 			}
 		});
 		this.registerOperator('-', "subtract", 1, new IAlgorithm() {
 			@Override
-			public double calc(Iterator<IMathExp> stack, IMathExp... param)
+			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return param[0].calc(stack) - param[1].calc(stack); 
+				return param[0] - param[1]; 
 			}
 		});
 		this.registerOperator('*', "multiply", 2, new IAlgorithm() {
 			@Override
-			public double calc(Iterator<IMathExp> stack, IMathExp... param)
+			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return param[0].calc(stack) * param[1].calc(stack); 
+				return param[0] * param[1]; 
 			}
 		});
 		this.registerOperator('/', "divide", 2, new IAlgorithm() {
 			@Override
-			public double calc(Iterator<IMathExp> stack, IMathExp... param)
+			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return param[0].calc(stack) / param[1].calc(stack); 
+				return param[0] / param[1]; 
 			}
 		});
 		
 		this.registerOperator('^', "exponential", 3, new IAlgorithm() {
 			@Override
-			public double calc(Iterator<IMathExp> stack, IMathExp... param)
+			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return Math.pow(param[0].calc(stack), param[1].calc(stack)); 
+				return Math.pow(param[0], param[1]); 
 			}
 		});
 		
 		this.registerOperator('|', "modulo", 2, new IAlgorithm() {
 			@Override
-			public double calc(Iterator<IMathExp> stack, IMathExp... param)
+			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return param[0].calc(stack) % param[1].calc(stack); 
+				return param[0] % param[1]; 
 			}
 		});
 	}
@@ -68,7 +68,8 @@ public class Calculator {
 		LinkedList<IMathExp> expChain = this.chunkify(prefixified);
 		
 		Iterator<IMathExp> iterator = expChain.iterator();
-		return iterator.next().calc(iterator);		
+		IMathExp mathExp = iterator.next();
+		return mathExp.calc(iterator);	
 	}
 	
 

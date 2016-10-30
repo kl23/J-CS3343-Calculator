@@ -53,4 +53,20 @@ public class TestScript {
 		double ans = calc.calculate("1/0");
 		Assert.assertTrue(Double.isInfinite(ans));
 	}
+	
+	@Test
+	public void testMixedPriority_1()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calculate("1+2*3");
+		Assert.assertEquals(7.0d, ans, 0.0d);
+	}
+	@Test
+	public void testMixedPriority_2()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calculate("2*3+1");
+		Assert.assertEquals(7.0d, ans, 0.0d);
+	}
+	
 }

@@ -18,9 +18,10 @@ public final class Function implements IMathExp
 	public String getName() { return this.name; }
 	
 	@Override
-	public double calc(Iterator<IMathExp> stack)
+	public double calc(Iterator<IMathExp> iterator)
 	{
-		return algorithm.calc(stack, stack.next());
+		double number = iterator.next().calc(iterator);
+		return algorithm.calc(iterator, number);
 	}
 	
 }

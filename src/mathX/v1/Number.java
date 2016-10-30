@@ -18,5 +18,7 @@ public class Number implements IMathExp
 	
 	@Override
 	public double calc(Iterator<IMathExp> stack) { return this._v; }
+	
+	public double getValue() { return this._v; }
 
 }

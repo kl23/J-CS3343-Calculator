@@ -24,8 +24,8 @@ public final class Operator implements IMathExp
 	@Override
 	public double calc(Iterator<IMathExp> iterator)
 	{
-		IMathExp left = iterator.next();
-		IMathExp right = iterator.next();
+		double left = iterator.next().calc(iterator);
+		double right = iterator.next().calc(iterator);
 		return algorithm.calc(iterator, left, right);
 	}
 }
