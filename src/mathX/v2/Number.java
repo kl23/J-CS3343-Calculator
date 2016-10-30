@@ -11,7 +11,7 @@ public class Number implements IMathExp
 	private double _v;
 	
 	@Override
-	public int getPriority() { return Integer.MIN_VALUE; }
+	public int getPriority() { return Integer.MAX_VALUE; }
 	
 	@Override
 	public String getName() { return ""+this._v; }
