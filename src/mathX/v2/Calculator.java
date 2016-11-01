@@ -1,6 +1,7 @@
 package mathX.v2;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class Calculator {
 	
@@ -53,55 +54,8 @@ public class Calculator {
 		});
 		
 		// register functions
-		this.registerFunction((char)128, "sine", new IAlgorithm() {
-			@Override
-			public double calc(Iterator<IMathExp> iterator, double... param)
-			{
-				return Math.sin(param[0]); 
-			}
-		});
-		
-		this.registerFunction((char)129, "cosine", new IAlgorithm() {
-			@Override
-			public double calc(Iterator<IMathExp> iterator, double... param)
-			{
-				return Math.cos(param[0]); 
-			}
-		});
-		
-		this.registerFunction((char)130, "tangent", new IAlgorithm() {
-			@Override
-			public double calc(Iterator<IMathExp> iterator, double... param)
-			{
-				return Math.tan(param[0]); 
-			}
-		});
-		
-		this.registerFunction((char)131, "secant", new IAlgorithm() {
-			@Override
-			public double calc(Iterator<IMathExp> iterator, double... param)
-			{
-				return 1.0 / Math.cos(param[0]); 
-			}
-		});
-		
-		this.registerFunction((char)132, "cosecant", new IAlgorithm() {
-			@Override
-			public double calc(Iterator<IMathExp> iterator, double... param)
-			{
-				return 1.0 / Math.sin(param[0]); 
-			}
-		});
-		
-		this.registerFunction((char)133, "cotangent", new IAlgorithm() {
-			@Override
-			public double calc(Iterator<IMathExp> iterator, double... param)
-			{
-				return 1.0 / Math.tan(param[0]); 
-			}
-		});
-		
-		this.registerFunction((char)134, "arcsine", new IAlgorithm() {
+		// -- arc-functions must be registered before, as their names collides
+		this.registerFunction("arcsin", "arcsine", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
@@ -109,7 +63,7 @@ public class Calculator {
 			}
 		});
 		
-		this.registerFunction((char)135, "arccosine", new IAlgorithm() {
+		this.registerFunction("arccos", "arccosine", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
@@ -117,7 +71,7 @@ public class Calculator {
 			}
 		});
 		
-		this.registerFunction((char)136, "arctangent", new IAlgorithm() {
+		this.registerFunction("arctan", "arctangent", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
@@ -125,31 +79,78 @@ public class Calculator {
 			}
 		});
 		
-		this.registerFunction((char)137, "arcsecant", new IAlgorithm() {
+		this.registerFunction("arcsec", "arcsecant", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return Math.acos(1.0 / param[0]); 
+				return Math.acos(1.0d / param[0]); 
 			}
 		});
 		
-		this.registerFunction((char)138, "arccosecant", new IAlgorithm() {
+		this.registerFunction("arccsc", "arccosecant", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return Math.asin(1.0 / param[0]); 
+				return Math.asin(1.0d / param[0]); 
 			}
 		});
 		
-		this.registerFunction((char)139, "arccotangent", new IAlgorithm() {
+		this.registerFunction("arccot", "arccotangent", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return Math.atan(1.0 / param[0]); 
+				return Math.atan(1.0d / param[0]); 
+			}
+		});
+		this.registerFunction("sin", "sine", new IAlgorithm() {
+			@Override
+			public double calc(Iterator<IMathExp> iterator, double... param)
+			{
+				return Math.sin(param[0]); 
 			}
 		});
 		
-		this.registerFunction((char)140, "logarithm", new IAlgorithm() {
+		this.registerFunction("cos", "cosine", new IAlgorithm() {
+			@Override
+			public double calc(Iterator<IMathExp> iterator, double... param)
+			{
+				return Math.cos(param[0]); 
+			}
+		});
+		
+		this.registerFunction("tan", "tangent", new IAlgorithm() {
+			@Override
+			public double calc(Iterator<IMathExp> iterator, double... param)
+			{
+				return Math.tan(param[0]); 
+			}
+		});
+		
+		this.registerFunction("sec", "secant", new IAlgorithm() {
+			@Override
+			public double calc(Iterator<IMathExp> iterator, double... param)
+			{
+				return 1.0d / Math.cos(param[0]); 
+			}
+		});
+		
+		this.registerFunction("csc", "cosecant", new IAlgorithm() {
+			@Override
+			public double calc(Iterator<IMathExp> iterator, double... param)
+			{
+				return 1.0d / Math.sin(param[0]); 
+			}
+		});
+		
+		this.registerFunction("cot", "cotangent", new IAlgorithm() {
+			@Override
+			public double calc(Iterator<IMathExp> iterator, double... param)
+			{
+				return 1.0d / Math.tan(param[0]); 
+			}
+		});
+		
+		this.registerFunction("log", "logarithm", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
@@ -157,11 +158,11 @@ public class Calculator {
 			}
 		});
 		
-		this.registerFunction((char)141, "NaturalLogarithm", new IAlgorithm() {
+		this.registerFunction("ln", "NaturalLogarithm", new IAlgorithm() {
 			@Override
 			public double calc(Iterator<IMathExp> iterator, double... param)
 			{
-				return Math.log(param[0]); 
+				return Math.log(param[0]);
 			}
 		});
 		
@@ -170,8 +171,9 @@ public class Calculator {
 		this.registerConstant('e', Math.E);
 	}
 	
-	private Map<Character, IMathExp> tokenKeys = new HashMap<>(); 
-	
+	private Map<Character, IMathExp> tokenKeys = new HashMap<>();
+	private Map<String, Character> fncSymbols = new LinkedHashMap<>();		// note that linked hash map preserves the insertion order, which is required in this case
+	private int fnOffset = 128;
 	
 	public void registerOperator(char symbol, String name, int priority, IAlgorithm algorithm)
 	{
@@ -179,10 +181,18 @@ public class Calculator {
 		this.tokenKeys.put(symbol, new Operator(name, priority, algorithm));
 	}
 	
-	public void registerFunction(char symbol, String name, IAlgorithm algorithm)
+	public void registerFunction(String regName, String fullName, IAlgorithm algorithm)
 	{
-		if (this.tokenKeys.containsKey(symbol)) throw new RuntimeException("Symbol is already registered.");
-		this.tokenKeys.put(symbol, new Function(name, algorithm));
+		regName = regName.toLowerCase();
+		
+		if (this.fncSymbols.containsKey(regName)) throw new RuntimeException("Label is already registered.");
+		
+		// get next usable symbol, no protection
+		char symbol;
+		while (this.tokenKeys.containsKey(symbol = (char)fnOffset++));
+		
+		this.fncSymbols.put(regName, symbol);
+		this.tokenKeys.put(symbol, new Function(fullName, algorithm));
 	}
 	
 	public void registerConstant(char symbol, double number)
@@ -191,27 +201,31 @@ public class Calculator {
 		this.tokenKeys.put(symbol, new Number(number));
 	}
 	
-	private String convertFunctionNameToSymbol(String mathRaw)
+	private String convertToSymbols(String mathRaw)
 	{
-		// Arc-Trigonometric Functions
-		mathRaw = mathRaw.replaceAll("arcsin", String.valueOf((char)134));
-		mathRaw = mathRaw.replaceAll("arccos", String.valueOf((char)135));
-		mathRaw = mathRaw.replaceAll("arctan", String.valueOf((char)136));
-		mathRaw = mathRaw.replaceAll("arcsec", String.valueOf((char)137));
-		mathRaw = mathRaw.replaceAll("arccsc", String.valueOf((char)138));
-		mathRaw = mathRaw.replaceAll("arccot", String.valueOf((char)139));
-		
-		// Trigonometric Functions
-		mathRaw = mathRaw.replaceAll("sin", String.valueOf((char)128));
-		mathRaw = mathRaw.replaceAll("cos", String.valueOf((char)129));
-		mathRaw = mathRaw.replaceAll("tan", String.valueOf((char)130));
-		mathRaw = mathRaw.replaceAll("sec", String.valueOf((char)131));
-		mathRaw = mathRaw.replaceAll("csc", String.valueOf((char)132));
-		mathRaw = mathRaw.replaceAll("cot", String.valueOf((char)133));
-		
-		// Log Functions
-		mathRaw = mathRaw.replaceAll("log", String.valueOf((char)140));
-		mathRaw = mathRaw.replaceAll("ln", String.valueOf((char)141));
+	
+//		// Arc-Trigonometric Functions
+//		mathRaw = mathRaw.replaceAll("arcsin", String.valueOf((char)134));
+//		mathRaw = mathRaw.replaceAll("arccos", String.valueOf((char)135));
+//		mathRaw = mathRaw.replaceAll("arctan", String.valueOf((char)136));
+//		mathRaw = mathRaw.replaceAll("arcsec", String.valueOf((char)137));
+//		mathRaw = mathRaw.replaceAll("arccsc", String.valueOf((char)138));
+//		mathRaw = mathRaw.replaceAll("arccot", String.valueOf((char)139));
+//		
+//		// Trigonometric Functions
+//		mathRaw = mathRaw.replaceAll("sin", String.valueOf((char)128));
+//		mathRaw = mathRaw.replaceAll("cos", String.valueOf((char)129));
+//		mathRaw = mathRaw.replaceAll("tan", String.valueOf((char)130));
+//		mathRaw = mathRaw.replaceAll("sec", String.valueOf((char)131));
+//		mathRaw = mathRaw.replaceAll("csc", String.valueOf((char)132));
+//		mathRaw = mathRaw.replaceAll("cot", String.valueOf((char)133));
+//		
+//		// Log Functions
+//		mathRaw = mathRaw.replaceAll("log", String.valueOf((char)140));
+//		mathRaw = mathRaw.replaceAll("ln", String.valueOf((char)141));
+		for (Entry<String, Character> e : this.fncSymbols.entrySet()) {
+			mathRaw = mathRaw.replaceAll(e.getKey(), e.getValue().toString());
+		}
 		
 		// Percentage and Constant
 		mathRaw = mathRaw.replaceAll("%", "/100.0");
@@ -223,7 +237,7 @@ public class Calculator {
 	public double calculate(String mathRaw)
 	{
 		mathRaw = mathRaw.toLowerCase();
-		mathRaw = convertFunctionNameToSymbol(mathRaw);
+		mathRaw = convertToSymbols(mathRaw);
 		String prefixified = this.prefixify(mathRaw);
 		LinkedList<IMathExp> expChain = this.chunkify(prefixified);
 		
@@ -233,19 +247,14 @@ public class Calculator {
 	}
 	
 
-	private Stack<IMathExp> createMathExpressions(String mathPrefix)
-	{
-		throw new UnsupportedOperationException();
-	}
-	
 	protected String prefixify(String raw)
 	{
 		// remove all spaces
 		raw = raw.replaceAll("/\\s/", "");
 		
 		// convert brackets
-		raw = raw.replaceAll("/[\\[{]/", "(");
-		raw = raw.replaceAll("/[\\]}]/", ")");
+		raw = raw.replaceAll("/[\\[{<]/", "(");
+		raw = raw.replaceAll("/[\\]}>]/", ")");
 		
 		// check string contains invalid characters
 		
