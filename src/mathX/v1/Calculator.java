@@ -72,12 +72,6 @@ public class Calculator {
 		return mathExp.calc(iterator);	
 	}
 	
-
-	protected Stack<IMathExp> createMathExpressions(String mathPrefix)
-	{
-		throw new UnsupportedOperationException();
-	}
-	
 	protected String prefixify(String raw)
 	{
 		// remove all spaces
