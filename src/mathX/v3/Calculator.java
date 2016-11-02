@@ -250,13 +250,12 @@ public class Calculator {
 		char[] chs = raw.toCharArray();
 		StringBuilder sb = new StringBuilder();
 		Stack<Character> stack = new Stack<>();
+		boolean _isMinus = false;
 		for (int i = chs.length - 1; i >= 0; i--)
 		{
 			if (' ' == chs[i])
 				continue;	// skip
-			else if (chs[i] >= '0' && chs[i] <= '9')
-				sb.append(chs[i]);
-			else if ('.' == chs[i])
+			else if (chs[i] >= '0' && chs[i] <= '9' || '.' == chs[i])
 				sb.append(chs[i]);
 			else if (')' == chs[i])
 				stack.push(')');
@@ -268,6 +267,10 @@ public class Calculator {
 			}
 			else if (tokenKeys.containsKey(chs[i]))
 			{
+				if (_isMinus) {
+					sb.setLength(sb.length() -1);
+					sb.append(stack.pop());
+				}
 				
 				if (stack.size() > 0 && ')' != stack.peek())
 				{
@@ -278,9 +281,21 @@ public class Calculator {
 				}
 				stack.push(chs[i]);
 				sb.append(' ');
+				
+				//--
+				_isMinus = ('-' == chs[i]);
+				continue;
 			}
-			else
+			else {
 				throw new UnsupportedOperationException("'" + chs[i] + "' is not supported.");
+			}
+			_isMinus = false;
+		}
+		
+		// last check
+		if (_isMinus) {
+			sb.setLength(sb.length() -1);
+			sb.append(stack.pop());
 		}
 		
 		// pop last

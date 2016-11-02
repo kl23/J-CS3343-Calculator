@@ -50,5 +50,8 @@ public final class Operator implements IMathExp
 		
 		return new mVector(vs);
 	}
+	
+	@Override
+	public String toString() { return this.getName(); }
 
 }
