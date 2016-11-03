@@ -17,6 +17,9 @@ public class Calculator {
 		// register mode
 		this.tokenKeys.put((char)129, new Mode());
 		
+		// register last answer
+		this.tokenKeys.put((char)130, Answer.getInstance());
+		
 		// register operators
 		this.registerOperator('+', "add", 1, new IAlgorithm() {
 			@Override
@@ -257,7 +260,7 @@ public class Calculator {
 	
 	private Map<Character, IMathExp> tokenKeys = new HashMap<>();
 	private Map<String, Character> fncSymbols = new LinkedHashMap<>();		// note that linked hash map preserves the insertion order, which is required in this case
-	private int fnOffset = 130;
+	private int fnOffset = 131;
 	
 	public void registerOperator(char symbol, String name, int priority, IAlgorithm algorithm)
 	{
@@ -295,6 +298,7 @@ public class Calculator {
 		mathRaw = mathRaw.replaceAll("%", "/100.0");
 		mathRaw = mathRaw.replaceAll("pi", "P");
 		mathRaw = mathRaw.replaceAll("mode", String.valueOf((char)129));
+		mathRaw = mathRaw.replaceAll("ans", String.valueOf((char)130));
 		
 		return mathRaw;
 	}
@@ -306,12 +310,13 @@ public class Calculator {
 		mathRaw = mathRaw.toLowerCase();
 		mathRaw = convertToSymbols(mathRaw);
 		String prefixified = this.prefixify(mathRaw);
-//		System.out.println(prefixified);
 		LinkedList<IMathExp> expChain = this.chunkify(prefixified);
 		
 		Iterator<IMathExp> iterator = expChain.iterator();
 		IMathExp mathExp = iterator.next();
-		return mathExp.value(iterator);	
+		mVector ans = mathExp.value(iterator);
+		Answer.getInstance().setValue(ans);
+		return ans;
 	}
 	
 

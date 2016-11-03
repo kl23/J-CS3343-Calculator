@@ -103,4 +103,14 @@ public class TestScriptC {
 		Assert.assertEquals(147.32277488562316650266036585016, ans, 0.0d);
 	}
 	
+	@Test
+	public void testSavedAns()
+	{
+		Calculator calc = new Calculator();
+		double q1 = calc.calcMagnitude("3+3*3");
+		double q2 = calc.calcMagnitude("ans/2");
+		double ans = calc.calcMagnitude("ans+3");
+		Assert.assertEquals(9.0, ans, 0.0d);
+	}
+	
 }
