@@ -239,10 +239,14 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				double sum=0;
+				double sum=0.0d, summation=0.0d;
 				for(int i=0;i<param.length;i++)
-					sum += param[i]*param[i];
-				return sum/param.length;
+					sum += param[i];
+				double mean = sum/param.length;
+				
+				for(int i=0;i<param.length;i++)
+					summation += Math.pow(param[i]-mean, 2);
+				return summation/(param.length-1);
 			}
 		});
 		
@@ -250,10 +254,14 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				double sum=0;
+				double sum=0.0d, summation=0.0d;
 				for(int i=0;i<param.length;i++)
-					sum += param[i]*param[i];
-				return Math.sqrt(sum/param.length);
+					sum += param[i];
+				double mean = sum/param.length;
+				
+				for(int i=0;i<param.length;i++)
+					summation += Math.pow(param[i]-mean, 2);
+				return Math.sqrt(summation/(param.length-1));
 			}
 		});
 	}

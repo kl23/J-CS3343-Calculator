@@ -91,16 +91,16 @@ public class TestScriptC {
 	public void testVar()
 	{
 		Calculator calc = new Calculator();
-		double ans = calc.calcMagnitude("var(206, 76, -224, 36, -94)");
-		Assert.assertEquals(21704.0d, ans, 0.0d);
+		double ans = calc.calcMagnitude("var(206, 76, -102, 36, -34)");
+		Assert.assertEquals(13610.8000000000, ans, 1e-10);
 	}
 	
 	@Test
 	public void testSd()
 	{
 		Calculator calc = new Calculator();
-		double ans = calc.calcMagnitude("sd(206, 76, -224, 36, -94)");
-		Assert.assertEquals(147.32277488562316650266036585016, ans, 0.0d);
+		double ans = calc.calcMagnitude("sd(206, 76, -102, 36, -34)");
+		Assert.assertEquals(116.6653333257, ans, 1e-10);
 	}
 	
 	@Test

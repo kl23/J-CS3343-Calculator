@@ -2,8 +2,8 @@ package mathX.v3;
 
 import java.util.Iterator;
 
-public class Answer implements IMathExp {
-	
+public class Answer implements IMathExp
+{
 	private mVector values;
 	
 	private static Answer instance;
@@ -21,10 +21,9 @@ public class Answer implements IMathExp {
 	public int getPriority() { return Integer.MAX_VALUE; }
 
 	@Override
-	public String getName() { return this.toString(); }
+	public String getName() { return "last answer"; }
 	
-	public void setValue(mVector ans)
-	{
+	public void setValue(mVector ans) {
 		this.values=ans;
 	}
 	
