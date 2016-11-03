@@ -7,9 +7,15 @@ public class Calculator {
 	
 	public Calculator()
 	{
+		// register constants
+		this.registerConstant('P', Math.PI);
+		this.registerConstant('e', Math.E);
+				
 		// register comma -> vector2
 		this.tokenKeys.put(',', new VecDelimitor());
 		
+		// register mode
+		this.tokenKeys.put((char)129, new Mode());
 		
 		// register operators
 		this.registerOperator('+', "add", 1, new IAlgorithm() {
@@ -163,7 +169,7 @@ public class Calculator {
 			}
 		});
 		
-		this.registerFunction("ln", "NaturalLogarithm", new IAlgorithm() {
+		this.registerFunction("ln", "naturalLogarithm", new IAlgorithm() {
 			@Override
 			public double calc(double... param)
 			{
@@ -171,14 +177,57 @@ public class Calculator {
 			}
 		});
 		
-		// register constants
-		this.registerConstant('P', Math.PI);
-		this.registerConstant('e', Math.E);
+		this.registerFunction("max", "maximum", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				double ans=param[0];
+				for(int i=1;i<param.length;i++)
+					ans = param[i]>ans?param[i]:ans;
+				return ans;
+			}
+		});
+		
+		this.registerFunction("min", "minimum", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				double ans=param[0];
+				for(int i=1;i<param.length;i++)
+					ans = param[i]<ans?param[i]:ans;
+				return ans;
+			}
+		});
+		
+		this.registerFunction("mean", "mean", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				double sum=0.0d;
+				for(int i=0;i<param.length;i++)
+					sum += param[i];
+				return sum/param.length;
+			}
+		});
+		
+		this.registerFunction("median", "median", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				Arrays.sort(param);
+				double ans;
+				if (param.length % 2 == 0)
+					ans = (param[param.length/2] + param[param.length/2 - 1])/2;
+				else
+					ans = param[param.length/2];
+				return ans;
+			}
+		});
 	}
 	
 	private Map<Character, IMathExp> tokenKeys = new HashMap<>();
 	private Map<String, Character> fncSymbols = new LinkedHashMap<>();		// note that linked hash map preserves the insertion order, which is required in this case
-	private int fnOffset = 128;
+	private int fnOffset = 130;
 	
 	public void registerOperator(char symbol, String name, int priority, IAlgorithm algorithm)
 	{
@@ -203,7 +252,7 @@ public class Calculator {
 	public void registerConstant(char symbol, double number)
 	{
 		if (this.tokenKeys.containsKey(symbol)) throw new RuntimeException("Symbol is already registered.");
-		this.tokenKeys.put(symbol, new Number(number));
+		this.tokenKeys.put(symbol, new mVector(number));
 	}
 	
 	private String convertToSymbols(String mathRaw)
@@ -212,10 +261,11 @@ public class Calculator {
 			mathRaw = mathRaw.replaceAll(e.getKey(), e.getValue().toString());
 		}
 		
-		// Percentage and Constant
+		// convert others
 		mathRaw = mathRaw.replaceAll("%", "/100.0");
 		mathRaw = mathRaw.replaceAll("pi", "P");
-
+		mathRaw = mathRaw.replaceAll("mode", String.valueOf((char)129));
+		
 		return mathRaw;
 	}
 	
@@ -226,6 +276,7 @@ public class Calculator {
 		mathRaw = mathRaw.toLowerCase();
 		mathRaw = convertToSymbols(mathRaw);
 		String prefixified = this.prefixify(mathRaw);
+//		System.out.println(prefixified);
 		LinkedList<IMathExp> expChain = this.chunkify(prefixified);
 		
 		Iterator<IMathExp> iterator = expChain.iterator();
@@ -237,25 +288,38 @@ public class Calculator {
 	protected String prefixify(String raw)
 	{
 		// remove all spaces
-		raw = raw.replaceAll("/\\s/", "");
+		raw = raw.replaceAll("\\s","");
 		
 		// convert brackets
-		raw = raw.replaceAll("/[\\[{<]/", "(");
-		raw = raw.replaceAll("/[\\]}>]/", ")");
+		raw = raw.replaceAll("[\\[{<]","(");
+		raw = raw.replaceAll("[\\]}>]",")");
 		
 		// check string contains invalid characters
 		
-		
 		// proceed
-		char[] chs = raw.toCharArray();
+		char[] chs = raw.toCharArray();	
 		StringBuilder sb = new StringBuilder();
 		Stack<Character> stack = new Stack<>();
-		boolean _isMinus = false;
 		for (int i = chs.length - 1; i >= 0; i--)
 		{
-			if (' ' == chs[i])
-				continue;	// skip
-			else if (chs[i] >= '0' && chs[i] <= '9' || '.' == chs[i])
+			//check negative sign
+			if(chs[i]=='-')
+			{
+				int pos=i-1;
+				boolean _isNav=true;
+				while(pos>=0)
+				{
+					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]=='P' || chs[pos]=='e')
+						_isNav=false;
+					if(chs[pos]!='(' && chs[pos]!=')')
+						break;
+					pos--;
+				}
+				if(_isNav==true)
+					chs[i]=(char)128;
+			}
+			
+			if (chs[i] >= '0' && chs[i] <= '9' || '.' == chs[i] || (char)128 == chs[i])
 				sb.append(chs[i]);
 			else if (')' == chs[i])
 				stack.push(')');
@@ -267,35 +331,19 @@ public class Calculator {
 			}
 			else if (tokenKeys.containsKey(chs[i]))
 			{
-				if (_isMinus) {
-					sb.setLength(sb.length() -1);
-					sb.append(stack.pop());
-				}
-				
 				if (stack.size() > 0 && ')' != stack.peek())
 				{
 					IMathExp ins = tokenKeys.get(stack.peek());
 					IMathExp exp = tokenKeys.get(chs[i]);
 					if (exp.getPriority() < ins.getPriority())
-						sb.append(" " + stack.pop());					
+						sb.append(" " + stack.pop());
 				}
 				stack.push(chs[i]);
 				sb.append(' ');
-				
-				//--
-				_isMinus = ('-' == chs[i]);
-				continue;
 			}
 			else {
 				throw new UnsupportedOperationException("'" + chs[i] + "' is not supported.");
 			}
-			_isMinus = false;
-		}
-		
-		// last check
-		if (_isMinus) {
-			sb.setLength(sb.length() -1);
-			sb.append(stack.pop());
 		}
 		
 		// pop last
@@ -304,6 +352,7 @@ public class Calculator {
 		
 		String rtn = sb.reverse().toString();
 		rtn = rtn.replaceAll(" +", " ");
+		rtn = rtn.replaceAll(String.valueOf((char)128), "-");
 		return rtn;
 	}
 	
@@ -326,7 +375,7 @@ public class Calculator {
 					} // else goto default
 				default:
 					double d = Double.parseDouble(chunks[i]);
-					rtn.add(new Number(d));
+					rtn.add(new mVector(d));
 					break;
 			}
 		} // end for

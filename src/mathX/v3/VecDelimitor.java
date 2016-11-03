@@ -15,9 +15,12 @@ public final class VecDelimitor implements IMathExp
 	{
 		mVector left = iterator.next().value(iterator);
 		mVector right = iterator.next().value(iterator);
-
-		// try to handle 2D only
-		double[] vs = { left.get(0), right.get(0) };
+		
+		double[] vs = new double[left.size()+1];
+		for(int i=0; i<left.size();i++)
+			vs[i]=left.get(i);
+		
+		vs[vs.length-1]=right.get(0);
 
 		return new mVector(vs);
 	}

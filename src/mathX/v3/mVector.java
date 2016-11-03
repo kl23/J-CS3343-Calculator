@@ -15,6 +15,7 @@ class mVector implements IMathExp {
 	
 	public double magnitude()
 	{
+		if (values.length == 1) { return values[0]; }
 		double sum = 0.0d;
 		for (double d : values)
 			sum += d * d;

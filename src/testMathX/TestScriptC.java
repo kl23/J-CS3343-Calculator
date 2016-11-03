@@ -2,7 +2,6 @@ package testMathX;
 
 import mathX.v3.*;
 
-
 import org.junit.Test;
 import org.junit.Assert;
 
@@ -15,7 +14,6 @@ public class TestScriptC {
 		double ans = calc.calcMagnitude("log(64, 2)");
 		Assert.assertEquals(6.0d, ans, 0.0d);
 	}
-	
 	
 	@Test
 	public void testLogBase3()
@@ -32,5 +30,53 @@ public class TestScriptC {
 		String ans = calc.calculate("(1,10)+(2,20)");
 		Assert.assertEquals("<3.0, 30.0>", ans);
 	}
-		
+	
+	@Test
+	public void testMax()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("max(27, 3, 4, 9, 1)");
+		Assert.assertEquals(27.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testMin()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("min(-27, 3, 4, 9, -1)");
+		Assert.assertEquals(-27.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testMean()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("mean(27, 3, 4, 1, 6)");
+		Assert.assertEquals(8.2d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testMedian_1()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("median(27, 3, 4, 1, 6)");
+		Assert.assertEquals(4.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testMedian_2()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("median(27, 3, 11, 1, 6, 13)");
+		Assert.assertEquals(8.5d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testMode()
+	{
+		Calculator calc = new Calculator();
+		String ans = calc.calculate("mode(27, 8, 13, 8, 6, 13, 1, 1, 66, 9)");
+		Assert.assertEquals("<1.0, 8.0, 13.0>", ans);
+	}
+	
 }
