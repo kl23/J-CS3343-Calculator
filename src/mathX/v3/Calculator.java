@@ -217,10 +217,40 @@ public class Calculator {
 				Arrays.sort(param);
 				double ans;
 				if (param.length % 2 == 0)
-					ans = (param[param.length/2] + param[param.length/2 - 1])/2;
+					ans = (param[param.length/2] + param[param.length/2 - 1])/2.0;
 				else
 					ans = param[param.length/2];
 				return ans;
+			}
+		});
+		
+		this.registerFunction("abs", "absolute", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				return Math.abs(param[0]);
+			}
+		});
+		
+		this.registerFunction("var", "variance", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				double sum=0;
+				for(int i=0;i<param.length;i++)
+					sum += param[i]*param[i];
+				return sum/param.length;
+			}
+		});
+		
+		this.registerFunction("sd", "standardDeviation", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				double sum=0;
+				for(int i=0;i<param.length;i++)
+					sum += param[i]*param[i];
+				return Math.sqrt(sum/param.length);
 			}
 		});
 	}

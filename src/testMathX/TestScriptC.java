@@ -79,4 +79,28 @@ public class TestScriptC {
 		Assert.assertEquals("<1.0, 8.0, 13.0>", ans);
 	}
 	
+	@Test
+	public void testAbs()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("abs(-17.5)");
+		Assert.assertEquals(17.5d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testVar()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("var(206, 76, -224, 36, -94)");
+		Assert.assertEquals(21704.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testSd()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("sd(206, 76, -224, 36, -94)");
+		Assert.assertEquals(147.32277488562316650266036585016, ans, 0.0d);
+	}
+	
 }
