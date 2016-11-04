@@ -7,18 +7,19 @@ public class Calculator {
 	
 	public Calculator()
 	{
+		// register =
+		this.tokenKeys.put('=', new AssignmentDelimitor());
+		// register comma -> vector
+		this.tokenKeys.put(',', new VecDelimitor());
+		
 		// register constants
 		this.registerConstant('P', Math.PI);
 		this.registerConstant('e', Math.E);
-				
-		// register comma -> vector2
-		this.tokenKeys.put(',', new VecDelimitor());
 		
-		// register mode
-		this.tokenKeys.put((char)129, new Mode());
 		
-		// register last answer
-		this.tokenKeys.put((char)130, Answer.getInstance());
+		// register independent classes
+		this.registerNameReplacement("ans", "last answer", Storage.Answer);	// last answer
+		this.registerNameReplacement("mode", "mode", new Mode());			// mode
 		
 		// register operators
 		this.registerOperator('+', "add", 1, new IAlgorithm() {
@@ -264,6 +265,10 @@ public class Calculator {
 				return Math.sqrt(summation/(param.length-1));
 			}
 		});
+		
+		// register storage - must at last
+		for (char c = 'A'; c <= 'F'; c++)
+			this.tokenKeys.put(c, new Storage("storage " + c));
 	}
 	
 	private Map<Character, IMathExp> tokenKeys = new HashMap<>();
@@ -278,6 +283,11 @@ public class Calculator {
 	
 	public void registerFunction(String regName, String fullName, IAlgorithm algorithm)
 	{
+		IMathExp mathExp = new Function(fullName, algorithm);
+		this.registerNameReplacement(regName, fullName, mathExp);
+	}
+	protected void registerNameReplacement(String regName, String fullName, IMathExp mathExp)
+	{
 		regName = regName.toLowerCase();
 		
 		if (this.fncSymbols.containsKey(regName)) throw new RuntimeException("Label is already registered.");
@@ -287,9 +297,8 @@ public class Calculator {
 		while (this.tokenKeys.containsKey(symbol = (char)fnOffset++));
 		
 		this.fncSymbols.put(regName, symbol);
-		this.tokenKeys.put(symbol, new Function(fullName, algorithm));
+		this.tokenKeys.put(symbol, mathExp);
 	}
-	
 	public void registerConstant(char symbol, double number)
 	{
 		if (this.tokenKeys.containsKey(symbol)) throw new RuntimeException("Symbol is already registered.");
@@ -305,8 +314,11 @@ public class Calculator {
 		// convert others
 		mathRaw = mathRaw.replaceAll("%", "/100.0");
 		mathRaw = mathRaw.replaceAll("pi", "P");
-		mathRaw = mathRaw.replaceAll("mode", String.valueOf((char)129));
-		mathRaw = mathRaw.replaceAll("ans", String.valueOf((char)130));
+		//mathRaw = mathRaw.replaceAll("mode", String.valueOf((char)129));
+		//mathRaw = mathRaw.replaceAll("ans", String.valueOf((char)130));
+		
+		// back to upper, to support storage
+		mathRaw = mathRaw.toUpperCase();
 		
 		return mathRaw;
 	}
@@ -323,7 +335,7 @@ public class Calculator {
 		Iterator<IMathExp> iterator = expChain.iterator();
 		IMathExp mathExp = iterator.next();
 		mVector ans = mathExp.value(iterator);
-		Answer.getInstance().setValue(ans);
+		Storage.Answer.setValue(ans);
 		return ans;
 	}
 	
@@ -385,7 +397,7 @@ public class Calculator {
 				sb.append(' ');
 			}
 			else {
-				throw new UnsupportedOperationException("'" + chs[i] + "' is not supported.");
+				throw new UnsupportedOperationException("Operend '" + chs[i] + "' is not supported.");
 			}
 		}
 		

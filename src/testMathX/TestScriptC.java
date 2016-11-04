@@ -92,7 +92,7 @@ public class TestScriptC {
 	{
 		Calculator calc = new Calculator();
 		double ans = calc.calcMagnitude("var(206, 76, -102, 36, -34)");
-		Assert.assertEquals(13610.8000000000, ans, 1e-10);
+		Assert.assertEquals(13610.8000000000d, ans, 1e-10);
 	}
 	
 	@Test
@@ -100,7 +100,7 @@ public class TestScriptC {
 	{
 		Calculator calc = new Calculator();
 		double ans = calc.calcMagnitude("sd(206, 76, -102, 36, -34)");
-		Assert.assertEquals(116.6653333257, ans, 1e-10);
+		Assert.assertEquals(116.6653333257d, ans, 1e-10);
 	}
 	
 	@Test
@@ -110,7 +110,26 @@ public class TestScriptC {
 		double q1 = calc.calcMagnitude("3+3*3");
 		double q2 = calc.calcMagnitude("ans/2");
 		double ans = calc.calcMagnitude("ans+3");
-		Assert.assertEquals(9.0, ans, 0.0d);
+		Assert.assertEquals(9.0d, ans, 0.0d);
 	}
+	
+	@Test
+	public void testStorage()
+	{
+		Calculator calc = new Calculator();
+		double q1 = calc.calcMagnitude("A=3+3*3");
+		double q2 = calc.calcMagnitude("B=ans/2");
+		double q3 = calc.calcMagnitude("C=ans+3");
+		
+		double ans;
+		ans = calc.calcMagnitude("A");
+		Assert.assertEquals(12.0d, ans, 0.0d);
+		ans = calc.calcMagnitude("B");
+		Assert.assertEquals(6.0d, ans, 0.0d);
+		ans = calc.calcMagnitude("C");
+		Assert.assertEquals(9.0d, ans, 0.0d);
+		
+	}
+	
 	
 }

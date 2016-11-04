@@ -1,10 +1,11 @@
 package mathX.v3;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 // note that this is not really a vector, just a collection of various numbers
 class mVector implements IMathExp {
+	
+	public static final mVector Zero = new mVector(0.0d); 
 	
 	public final int size() { return values.length; };
 	

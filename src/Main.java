@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-import mathX.v1.Calculator;
+import mathX.v3.Calculator;
 
 
 public class Main {
@@ -11,11 +11,18 @@ public class Main {
 		Scanner sn = new Scanner(System.in);
 		Calculator calc = new Calculator();
 		
-		System.out.print("Math> ");
-		String mathRaw = sn.nextLine();
+		while (true)
+		{
+			System.out.print("Math> ");
+			String mathRaw = sn.nextLine();
+			
+			if (mathRaw.equals("exit")) break;
+			
+			String d = calc.calculate(mathRaw);
+			System.out.println(d);
+		}
 		
-		double d = calc.calculate(mathRaw);
-		System.out.println(d);
+		System.out.println("bye.");
 		
 	}
 }
