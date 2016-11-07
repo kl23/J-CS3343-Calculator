@@ -3,6 +3,9 @@ package mathX.v3;
 import java.util.*;
 import java.util.Map.Entry;
 
+import mathX.v3.units.AngleUnits;
+import mathX.v3.units.IAngleUnit;
+
 public class Calculator {
 	
 	public Calculator()
@@ -15,7 +18,6 @@ public class Calculator {
 		// register constants
 		this.registerConstant('P', Math.PI);
 		this.registerConstant('E', Math.E);
-		
 		
 		// register independent classes
 		this.registerNameReplacement("ans", "last answer", Storage.Answer);	// last answer
@@ -73,7 +75,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.asin(param[0]); 
+				double deg = Math.asin(param[0]);
+				return angleUnit.toUnit(deg);
 			}
 		});
 		
@@ -81,7 +84,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.acos(param[0]); 
+				double deg = Math.acos(param[0]);
+				return angleUnit.toUnit(deg);
 			}
 		});
 		
@@ -89,7 +93,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.atan(param[0]); 
+				double deg = Math.atan(param[0]);
+				return angleUnit.toUnit(deg);
 			}
 		});
 		
@@ -97,7 +102,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.acos(1.0d / param[0]); 
+				double deg = Math.acos(1.0d / param[0]);
+				return angleUnit.toUnit(deg); 
 			}
 		});
 		
@@ -105,7 +111,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.asin(1.0d / param[0]); 
+				double deg = Math.asin(1.0d / param[0]);
+				return angleUnit.toUnit(deg);
 			}
 		});
 		
@@ -113,14 +120,16 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.atan(1.0d / param[0]); 
+				double deg = Math.atan(1.0d / param[0]);
+				return angleUnit.toUnit(deg);
 			}
 		});
 		this.registerFunction("sin", "sine", new IAlgorithm() {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.sin(param[0]); 
+				double deg = angleUnit.toRadian(param[0]);
+				return Math.sin(deg); 
 			}
 		});
 		
@@ -128,7 +137,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.cos(param[0]); 
+				double deg = angleUnit.toRadian(param[0]);
+				return Math.cos(deg); 
 			}
 		});
 		
@@ -136,7 +146,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return Math.tan(param[0]); 
+				double deg = angleUnit.toRadian(param[0]);
+				return Math.tan(deg); 
 			}
 		});
 		
@@ -144,7 +155,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return 1.0d / Math.cos(param[0]); 
+				double deg = angleUnit.toRadian(param[0]);
+				return 1.0d / Math.cos(deg); 
 			}
 		});
 		
@@ -152,7 +164,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return 1.0d / Math.sin(param[0]); 
+				double deg = angleUnit.toRadian(param[0]);
+				return 1.0d / Math.sin(deg); 
 			}
 		});
 		
@@ -160,7 +173,8 @@ public class Calculator {
 			@Override
 			public double calc(double... param)
 			{
-				return 1.0d / Math.tan(param[0]); 
+				double deg = angleUnit.toRadian(param[0]);
+				return 1.0d / Math.tan(deg); 
 			}
 		});
 		
@@ -279,9 +293,30 @@ public class Calculator {
 			this.tokenKeys.put(c, new Storage("storage " + c));
 	}
 	
+	private IAngleUnit angleUnit = AngleUnits.Radian;
+	
 	private Map<Character, IMathExp> tokenKeys = new HashMap<>();
 	private Map<String, Character> fncSymbols = new LinkedHashMap<>();		// note that linked hash map preserves the insertion order, which is required in this case
 	private int fnOffset = 131;
+	
+	public IAngleUnit setAngleUnit(String unitName)
+	{
+		unitName = unitName.toLowerCase();
+		// dirty code
+		switch(unitName)
+		{
+			case "rad":
+			case "radian":
+				return angleUnit = AngleUnits.Radian;
+			case "grad":
+			case "gradian":
+				return angleUnit = AngleUnits.Gradian;
+			case "turn":
+				return angleUnit = AngleUnits.Turn;
+			default:
+				return angleUnit = AngleUnits.Degree;
+		}
+	}
 	
 	public void registerOperator(char symbol, String name, int priority, IAlgorithm algorithm)
 	{
@@ -322,8 +357,6 @@ public class Calculator {
 		// convert others
 		mathRaw = mathRaw.replaceAll("%", "/100.0");
 		mathRaw = mathRaw.replaceAll("pi", "P");
-		//mathRaw = mathRaw.replaceAll("mode", String.valueOf((char)129));
-		//mathRaw = mathRaw.replaceAll("ans", String.valueOf((char)130));
 		
 		// back to upper, to support storage
 		mathRaw = mathRaw.toUpperCase();
@@ -450,6 +483,5 @@ public class Calculator {
 		
 		return rtn;
 	}
-	
 	
 }
