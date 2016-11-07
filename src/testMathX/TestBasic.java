@@ -3,7 +3,7 @@ package testMathX;
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;
-import mathX.v1.*;
+import mathX.v3.*;
 
 public class TestBasic
 {

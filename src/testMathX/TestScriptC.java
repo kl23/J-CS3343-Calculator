@@ -117,19 +117,50 @@ public class TestScriptC {
 	public void testStorage()
 	{
 		Calculator calc = new Calculator();
-		double q1 = calc.calcMagnitude("A=3+3*3");
+		double q1 = calc.calcMagnitude("A=4+2*3");
 		double q2 = calc.calcMagnitude("B=ans/2");
 		double q3 = calc.calcMagnitude("C=ans+3");
 		
 		double ans;
 		ans = calc.calcMagnitude("A");
-		Assert.assertEquals(12.0d, ans, 0.0d);
+		Assert.assertEquals(10.0d, ans, 0.0d);
 		ans = calc.calcMagnitude("B");
-		Assert.assertEquals(6.0d, ans, 0.0d);
+		Assert.assertEquals(5.0d, ans, 0.0d);
 		ans = calc.calcMagnitude("C");
-		Assert.assertEquals(9.0d, ans, 0.0d);
+		Assert.assertEquals(8.0d, ans, 0.0d);
 		
 	}
 	
+	@Test
+	public void testNegativeSign()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("-(2*3)");
+		Assert.assertEquals(-6.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testlne()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("lne");
+		Assert.assertEquals(1.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testTrigoFormat_A()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("sin6^2");
+		Assert.assertEquals(-0.991778853443115d, ans, 1e-15);
+	}
+	
+	@Test
+	public void testTrigoFormat_B()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("(sin6)^2");
+		Assert.assertEquals(0.078073020633753d, ans, 1e-15);
+	}
 	
 }

@@ -14,7 +14,7 @@ public class Calculator {
 		
 		// register constants
 		this.registerConstant('P', Math.PI);
-		this.registerConstant('e', Math.E);
+		this.registerConstant('E', Math.E);
 		
 		
 		// register independent classes
@@ -51,7 +51,7 @@ public class Calculator {
 			}
 		});
 		
-		this.registerOperator('^', "exponential", 3, new IAlgorithm() {
+		this.registerOperator('^', "exponential", Integer.MAX_VALUE-1, new IAlgorithm() {
 			@Override
 			public double calc(double... param)
 			{
@@ -266,8 +266,16 @@ public class Calculator {
 			}
 		});
 		
+		this.registerFunction("sqrt", "squareRoot", new IAlgorithm() {
+			@Override
+			public double calc(double... param)
+			{
+				return Math.sqrt(param[0]);
+			}
+		});
+		
 		// register storage - must at last
-		for (char c = 'A'; c <= 'F'; c++)
+		for (char c = 'A'; c <= 'D'; c++)
 			this.tokenKeys.put(c, new Storage("storage " + c));
 	}
 	
@@ -330,6 +338,7 @@ public class Calculator {
 		mathRaw = mathRaw.toLowerCase();
 		mathRaw = convertToSymbols(mathRaw);
 		String prefixified = this.prefixify(mathRaw);
+		System.out.println(prefixified);
 		LinkedList<IMathExp> expChain = this.chunkify(prefixified);
 		
 		Iterator<IMathExp> iterator = expChain.iterator();
@@ -361,16 +370,16 @@ public class Calculator {
 			if(chs[i]=='-')
 			{
 				int pos=i-1;
-				boolean _isNav=true;
+				boolean _isSign=true;
 				while(pos>=0)
 				{
 					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]=='P' || chs[pos]=='e')
-						_isNav=false;
+						_isSign=false;
 					if(chs[pos]!='(' && chs[pos]!=')')
 						break;
 					pos--;
 				}
-				if(_isNav==true)
+				if(_isSign==true)
 					chs[i]=(char)128;
 			}
 			
@@ -386,7 +395,12 @@ public class Calculator {
 			}
 			else if (tokenKeys.containsKey(chs[i]))
 			{
-				if (stack.size() > 0 && ')' != stack.peek())
+				if(tokenKeys.get(chs[i]) instanceof mVector || tokenKeys.get(chs[i]).getName()=="answer")
+				{
+					sb.append(chs[i]);
+					continue;
+				}
+				else if (stack.size() > 0 && ')' != stack.peek())
 				{
 					IMathExp ins = tokenKeys.get(stack.peek());
 					IMathExp exp = tokenKeys.get(chs[i]);
@@ -407,7 +421,7 @@ public class Calculator {
 		
 		String rtn = sb.reverse().toString();
 		rtn = rtn.replaceAll(" +", " ");
-		rtn = rtn.replaceAll(String.valueOf((char)128), "-");
+		rtn = rtn.replaceAll(String.valueOf((char)128), "* -1 ");
 		return rtn;
 	}
 	

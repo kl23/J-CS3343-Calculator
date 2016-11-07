@@ -13,7 +13,7 @@ public final class Function implements IMathExp
 	private IAlgorithm algorithm;
 	
 	@Override
-	public int getPriority() { return Integer.MAX_VALUE; }
+	public int getPriority() { return Integer.MAX_VALUE-2; }
 	
 	@Override
 	public String getName() { return this.name; }
