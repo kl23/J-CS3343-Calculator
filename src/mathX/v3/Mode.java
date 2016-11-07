@@ -10,7 +10,7 @@ public final class Mode implements IMathExp
 	public Mode() { }
 	
 	@Override
-	public int getPriority() { return Integer.MAX_VALUE-1; }
+	public int getPriority() { return Integer.MAX_VALUE-2; }
 	
 	@Override
 	public String getName() { return "mode"; }
