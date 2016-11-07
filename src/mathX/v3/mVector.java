@@ -16,11 +16,12 @@ class mVector implements IMathExp {
 	
 	public double magnitude()
 	{
-		if (values.length == 1) { return values[0]; }
-		double sum = 0.0d;
-		for (double d : values)
-			sum += d * d;
-		return Math.sqrt(sum);	
+//		if (values.length == 1) { return values[0]; }
+//		double sum = 0.0d;
+//		for (double d : values)
+//			sum += d * d;
+//		return Math.sqrt(sum);	
+		return values[0];
 	}
 	@Override
 	public int getPriority() { return Integer.MAX_VALUE; }

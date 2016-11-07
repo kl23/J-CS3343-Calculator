@@ -55,6 +55,14 @@ public class TestScript {
 	}
 	
 	@Test
+	public void testModulo()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("9|2");
+		Assert.assertEquals(1.0d, ans, 0.0d);
+	}
+	
+	@Test
 	public void testMixedPriority_1()
 	{
 		Calculator calc = new Calculator();

@@ -338,7 +338,6 @@ public class Calculator {
 		mathRaw = mathRaw.toLowerCase();
 		mathRaw = convertToSymbols(mathRaw);
 		String prefixified = this.prefixify(mathRaw);
-		System.out.println(prefixified);
 		LinkedList<IMathExp> expChain = this.chunkify(prefixified);
 		
 		Iterator<IMathExp> iterator = expChain.iterator();

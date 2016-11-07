@@ -163,4 +163,12 @@ public class TestScriptC {
 		Assert.assertEquals(0.078073020633753d, ans, 1e-15);
 	}
 	
+	@Test
+	public void testSqrt()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("sqrt(64)");
+		Assert.assertEquals(8.0d, ans, 0.0d);
+	}
+	
 }
