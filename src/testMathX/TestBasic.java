@@ -1,8 +1,10 @@
 package testMathX;
 
 import java.util.*;
+
 import org.junit.Assert;
 import org.junit.Test;
+
 import mathX.v3.*;
 
 public class TestBasic
@@ -89,12 +91,12 @@ public class TestBasic
 		LinkedList<IMathExp> result = calc.chunkify("+ * + 10 1 2 1");
 		
 		int offset = 0;
-		Assert.assertEquals("add", result.get(offset++).getName());
-		Assert.assertEquals("multiply", result.get(offset++).getName());
-		Assert.assertEquals("add", result.get(offset++).getName());
-		Assert.assertEquals("10.0", result.get(offset++).getName());
-		Assert.assertEquals("1.0", result.get(offset++).getName());
-		Assert.assertEquals("2.0", result.get(offset++).getName());
-		Assert.assertEquals("1.0", result.get(offset++).getName());
+		Assert.assertEquals("add", result.get(offset++).toString());
+		Assert.assertEquals("multiply", result.get(offset++).toString());
+		Assert.assertEquals("add", result.get(offset++).toString());
+		Assert.assertEquals("10.0", result.get(offset++).toString());
+		Assert.assertEquals("1.0", result.get(offset++).toString());
+		Assert.assertEquals("2.0", result.get(offset++).toString());
+		Assert.assertEquals("1.0", result.get(offset++).toString());
 	}
 }

@@ -91,13 +91,13 @@ public class TestScriptCombined
 		LinkedList<IMathExp> result = calc.chunkify("+ * + 10 1 2 1");
 		
 		int offset = 0;
-		Assert.assertEquals("add", result.get(offset++).getName());
-		Assert.assertEquals("multiply", result.get(offset++).getName());
-		Assert.assertEquals("add", result.get(offset++).getName());
-		Assert.assertEquals("10.0", result.get(offset++).getName());
-		Assert.assertEquals("1.0", result.get(offset++).getName());
-		Assert.assertEquals("2.0", result.get(offset++).getName());
-		Assert.assertEquals("1.0", result.get(offset++).getName());
+		Assert.assertEquals("add", result.get(offset++).toString());
+		Assert.assertEquals("multiply", result.get(offset++).toString());
+		Assert.assertEquals("add", result.get(offset++).toString());
+		Assert.assertEquals("10.0", result.get(offset++).toString());
+		Assert.assertEquals("1.0", result.get(offset++).toString());
+		Assert.assertEquals("2.0", result.get(offset++).toString());
+		Assert.assertEquals("1.0", result.get(offset++).toString());
 	}
 	
 	@Test
@@ -322,7 +322,7 @@ public class TestScriptCombined
 	}
 	
 	@Test
-	public void testAddVec()
+	public void testAddVec_1()
 	{
 		Calculator calc = new Calculator();
 		String ans = calc.calculate("(1,10)+(2,20)");
@@ -330,10 +330,18 @@ public class TestScriptCombined
 	}
 	
 	@Test
+	public void testAddVec_2()
+	{
+		Calculator calc = new Calculator();
+		String ans = calc.calculate("(1,10,20)+(2,20)");
+		Assert.assertEquals("<3.0, 30.0, 20.0>", ans);
+	}
+	
+	@Test
 	public void testMax()
 	{
 		Calculator calc = new Calculator();
-		double ans = calc.calcMagnitude("max(27, 3, 4, 9, 1)");
+		double ans = calc.calcMagnitude("max(3, 27, 4, 9, 1)");
 		Assert.assertEquals(27.0d, ans, 0.0d);
 	}
 	
@@ -341,7 +349,7 @@ public class TestScriptCombined
 	public void testMin()
 	{
 		Calculator calc = new Calculator();
-		double ans = calc.calcMagnitude("min(-27, 3, 4, 9, -1)");
+		double ans = calc.calcMagnitude("min(3, -27, 4, 9, -1)");
 		Assert.assertEquals(-27.0d, ans, 0.0d);
 	}
 	
@@ -430,11 +438,27 @@ public class TestScriptCombined
 	}
 	
 	@Test
-	public void testNegativeSign()
+	public void testNegativeSign_1()
 	{
 		Calculator calc = new Calculator();
 		double ans = calc.calcMagnitude("-(2*3)");
 		Assert.assertEquals(-6.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testNegativeSign_2()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("(4*6)-(2*3)");
+		Assert.assertEquals(18.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testNegativeSign_3()
+	{
+		Calculator calc = new Calculator();
+		double ans = calc.calcMagnitude("pi-pi+e-e");
+		Assert.assertEquals(0.0d, ans, 0.0d);
 	}
 	
 	@Test
@@ -467,5 +491,107 @@ public class TestScriptCombined
 		Calculator calc = new Calculator();
 		double ans = calc.calcMagnitude("sqrt(64)");
 		Assert.assertEquals(8.0d, ans, 0.0d);
+	}
+	
+	@Test
+	public void testUnsupportedOperend()
+	{
+		try
+		{
+			Calculator calc = new Calculator();
+			double ans = calc.calcMagnitude("xyz(45)");
+			Assert.fail();
+		}
+		catch(UnsupportedOperationException ex)
+		{
+			Assert.assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void testStorageRuntimeException()
+	{
+		try
+		{
+			Calculator calc = new Calculator();
+			double ans = calc.calcMagnitude("3=1+2");
+			Assert.fail();
+		}
+		catch(RuntimeException ex)
+		{
+			Assert.assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void testRegisteredOperator()
+	{
+		class stubCalculator extends Calculator
+		{
+			stubCalculator()
+			{
+				// register existed operator
+				this.registerOperator('+', "add", 1, new IAlgorithm() {
+					@Override
+					public double calc(double... param)
+					{
+						return param[0] + param[1]; 
+					}
+				});
+			}
+		}
+		
+		try
+		{
+			stubCalculator calc = new stubCalculator();
+		}
+		catch(RuntimeException ex)
+		{
+			Assert.assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void testRegisteredConstant()
+	{
+		class stubCalculator extends Calculator
+		{
+			stubCalculator()
+			{
+				// register existed constant
+				this.registerConstant('P', Math.PI);
+			}
+		}
+		
+		try
+		{
+			stubCalculator calc = new stubCalculator();
+		}
+		catch(RuntimeException ex)
+		{
+			Assert.assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void testRegisteredNameReplacement()
+	{
+		class stubCalculator extends Calculator
+		{
+			stubCalculator()
+			{
+				// register existed constant
+				this.registerNameReplacement("ans", "last answer", Storage.Answer);
+			}
+		}
+		
+		try
+		{
+			stubCalculator calc = new stubCalculator();
+		}
+		catch(RuntimeException ex)
+		{
+			Assert.assertTrue(true);
+		}
 	}
 }

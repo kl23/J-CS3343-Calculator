@@ -33,15 +33,19 @@ public final class Operator implements IMathExp
 		int max = right.size();
 		double[] vs;
 		
-//		if (max < min) {
-//			vs = left.values;
-//			// swap
-//			min ^= max;
-//			max ^= min;
-//			min ^= max;
-//		} else {
-			vs = right.values;	
-//		}
+		if (max < min) {
+			vs = new double[left.values.length];
+			for(int j=0; j<vs.length; j++)
+				vs[j]=left.get(j);
+			// swap
+			min ^= max;
+			max ^= min;
+			min ^= max;
+		} else {
+			vs = new double[right.values.length];
+			for(int j=0; j<vs.length; j++)
+				vs[j]=right.get(j);
+		}
 		
 		// calculate
 		for (; i < min; i++) {

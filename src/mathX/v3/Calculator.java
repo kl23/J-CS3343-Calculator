@@ -372,7 +372,7 @@ public class Calculator {
 				boolean _isSign=true;
 				while(pos>=0)
 				{
-					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]=='P' || chs[pos]=='e')
+					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]=='P' || chs[pos]=='E')
 						_isSign=false;
 					if(chs[pos]!='(' && chs[pos]!=')')
 						break;
