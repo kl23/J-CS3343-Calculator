@@ -2,7 +2,6 @@ package mathX.v3;
 
 import java.util.Iterator;
 
-// note that this is not really a vector, just a collection of various numbers
 class mVector implements IMathExp {
 	
 	public static final mVector Zero = new mVector(0.0d); 
@@ -16,11 +15,6 @@ class mVector implements IMathExp {
 	
 	public double magnitude()
 	{
-//		if (values.length == 1) { return values[0]; }
-//		double sum = 0.0d;
-//		for (double d : values)
-//			sum += d * d;
-//		return Math.sqrt(sum);	
 		return values[0];
 	}
 	@Override
