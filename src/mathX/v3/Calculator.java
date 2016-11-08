@@ -294,6 +294,7 @@ public class Calculator {
 	}
 	
 	private IAngleUnit angleUnit = AngleUnits.Radian;
+	private IBaseState baseState = BaseStates.Decimal;
 	
 	private Map<Character, IMathExp> tokenKeys = new HashMap<>();
 	private Map<String, Character> fncSymbols = new LinkedHashMap<>();		// note that linked hash map preserves the insertion order, which is required in this case
@@ -315,6 +316,16 @@ public class Calculator {
 				return angleUnit = AngleUnits.Turn;
 			default:
 				return angleUnit = AngleUnits.Degree;
+		}
+	}
+	public IBaseState setBase(int base)
+	{
+		switch (base)
+		{
+			case 16: return baseState = BaseStates.Hexadecimal;
+			case 8: return baseState = BaseStates.Octal;
+			case 2: return baseState = BaseStates.Binary;
+			default: return baseState = BaseStates.Decimal;
 		}
 	}
 	
@@ -365,7 +376,26 @@ public class Calculator {
 	}
 	
 	public double calcMagnitude(String mathRaw) { return _calculate(mathRaw).magnitude(); }
-	public String calculate(String mathRaw) { return _calculate(mathRaw).toString(); }
+	public String calculate(String mathRaw) {
+		mVector answer = _calculate(mathRaw);
+		
+		int i = 0;
+		String[] vals = new String[answer.values.length];
+		
+		for (;i < vals.length; i++)
+			vals[i] = baseState.toBasedNumber(answer.get(i));
+		
+		if (i == 1) { return vals[0]; }
+		
+		StringBuilder sb = new StringBuilder("<");
+		do {
+			sb.append(vals[vals.length - i]).append(", ");
+		} while (--i>1);
+		sb.append(vals[vals.length - 1]).append(">");
+		
+		return sb.toString();		
+		
+	}
 	private mVector _calculate(String mathRaw)
 	{
 		mathRaw = mathRaw.toLowerCase();
@@ -399,22 +429,26 @@ public class Calculator {
 		for (int i = chs.length - 1; i >= 0; i--)
 		{
 			//check negative sign
-			if(chs[i]=='-')
+			if(chs[i] == '-')
 			{
-				int pos=i-1;
-				boolean _isSign=true;
-				while(pos>=0)
+				int pos = i; //int pos = i - 1;
+				boolean _isSign=true;	// one-way flag
+				while(--pos >= 0) //while(pos >= 0)
 				{
 					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]=='P' || chs[pos]=='E')
+					{
 						_isSign=false;
-					if(chs[pos]!='(' && chs[pos]!=')')
 						break;
-					pos--;
+					}
+					if(chs[pos] != '(' && chs[pos] != ')')
+						break;
+					//pos--;
 				}
-				if(_isSign==true)
-					chs[i]=(char)128;
+				if(_isSign)	// strong-typed lang do not need === true
+					chs[i] = (char)128;
 			}
 			
+			//--
 			if (chs[i] >= '0' && chs[i] <= '9' || '.' == chs[i] || (char)128 == chs[i])
 				sb.append(chs[i]);
 			else if (')' == chs[i])
