@@ -1,6 +1,7 @@
 package testMathX;
 
 import mathX.v3.*;
+import mathX.v3.units.IAngleUnit;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -283,7 +284,7 @@ public class TestScriptC {
 		{
 			stubCalculator()
 			{
-				// register existed constant
+				// register existed name
 				this.registerNameReplacement("ans", "last answer", Storage.Answer);
 			}
 		}
@@ -298,4 +299,128 @@ public class TestScriptC {
 		}
 	}
 	
+	@Test
+	public void testAngleUnit_Degree()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setAngleUnit("degree");
+		double ans;
+		// -- toRadian
+		ans = calc.calcMagnitude("sin180");
+		Assert.assertEquals(0.0d, ans, 1e-10);
+		// -- toUnit
+		ans = calc.calcMagnitude("arcsin0.5");
+		Assert.assertEquals(30.0d, ans, 1e-10);
+	}
+	
+	@Test
+	public void testAngleUnit_Radian()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setAngleUnit("radian");
+		double ans;
+		// -- toRadian
+		ans = calc.calcMagnitude("sin180");
+		Assert.assertEquals(-0.80115263573383047774673111582099, ans, 1e-10);
+		// -- toUnit
+		ans = calc.calcMagnitude("arcsin0.5");
+		Assert.assertEquals(0.523598775598298873077107230546583, ans, 1e-10);
+	}
+	
+	@Test
+	public void testAngleUnit_Gradian()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setAngleUnit("gradian");
+		double ans;
+		// -- toRadian
+		ans = calc.calcMagnitude("sin180");
+		Assert.assertEquals(0.30901699437494742410229341718282, ans, 1e-10);
+		// -- toUnit
+		ans = calc.calcMagnitude("arcsin0.5");
+		Assert.assertEquals(33.333333333333333333333333333333, ans, 1e-10);
+	}
+	
+	@Test
+	public void testAngleUnit_Turn()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setAngleUnit("turn");
+		double ans;
+		// -- toRadian
+		ans = calc.calcMagnitude("sin180");
+		Assert.assertEquals(0.0d, ans, 1e-10);
+		// -- toUnit
+		ans = calc.calcMagnitude("arcsin0.5");
+		Assert.assertEquals(0.08333333333333333333333333333333, ans, 1e-10);
+	}
+	
+	@Test
+	public void testBase_Decimal()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IBaseState setBase(int base) { return super.setBase(base); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setBase(10);
+		String ans = calc.calculate("10");
+		Assert.assertEquals("10.0", ans);
+	}
+	
+	@Test
+	public void testBase_Hexadecimal()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IBaseState setBase(int base) { return super.setBase(base); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setBase(16);
+		String ans = calc.calculate("10");
+		Assert.assertEquals("a", ans);
+	}
+	
+	@Test
+	public void testBase_Octal()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IBaseState setBase(int base) { return super.setBase(base); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setBase(8);
+		String ans = calc.calculate("10");
+		Assert.assertEquals("12", ans);
+
+	}
+	
+	@Test
+	public void testBase_Binary()
+	{
+		class stubCalculator extends Calculator
+		{
+			public IBaseState setBase(int base) { return super.setBase(base); }
+		}
+		stubCalculator calc = new stubCalculator();
+		calc.setBase(2);
+		String ans = calc.calculate("10");
+		Assert.assertEquals("1010", ans);
+	}
 }
