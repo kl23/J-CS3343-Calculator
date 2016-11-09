@@ -599,11 +599,7 @@ public class TestScriptCombined
 	@Test
 	public void testAngleUnit_Degree()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setAngleUnit("degree");
 		double ans;
 		// -- toRadian
@@ -617,11 +613,7 @@ public class TestScriptCombined
 	@Test
 	public void testAngleUnit_Radian()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setAngleUnit("radian");
 		double ans;
 		// -- toRadian
@@ -635,11 +627,7 @@ public class TestScriptCombined
 	@Test
 	public void testAngleUnit_Gradian()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setAngleUnit("gradian");
 		double ans;
 		// -- toRadian
@@ -653,11 +641,7 @@ public class TestScriptCombined
 	@Test
 	public void testAngleUnit_Turn()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IAngleUnit setAngleUnit(String unitName) { return super.setAngleUnit(unitName); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setAngleUnit("turn");
 		double ans;
 		// -- toRadian
@@ -671,11 +655,7 @@ public class TestScriptCombined
 	@Test
 	public void testBase_Decimal()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IBaseState setBase(int base) { return super.setBase(base); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setBase(10);
 		String ans = calc.calculate("10");
 		Assert.assertEquals("10.0", ans);
@@ -684,11 +664,7 @@ public class TestScriptCombined
 	@Test
 	public void testBase_Hexadecimal()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IBaseState setBase(int base) { return super.setBase(base); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setBase(16);
 		String ans = calc.calculate("10");
 		Assert.assertEquals("a", ans);
@@ -697,11 +673,7 @@ public class TestScriptCombined
 	@Test
 	public void testBase_Octal()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IBaseState setBase(int base) { return super.setBase(base); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setBase(8);
 		String ans = calc.calculate("10");
 		Assert.assertEquals("12", ans);
@@ -711,11 +683,7 @@ public class TestScriptCombined
 	@Test
 	public void testBase_Binary()
 	{
-		class stubCalculator extends Calculator
-		{
-			public IBaseState setBase(int base) { return super.setBase(base); }
-		}
-		stubCalculator calc = new stubCalculator();
+		Calculator calc = new Calculator();
 		calc.setBase(2);
 		String ans = calc.calculate("10");
 		Assert.assertEquals("1010", ans);

@@ -25,16 +25,7 @@ class mVector implements IMathExp {
 	
 	@Override
 	public String toString() {
-		int i = values.length;
-		if (i == 1) { return String.valueOf(values[0]); }
-		
-		StringBuilder sb = new StringBuilder("<");
-		do {
-			sb.append(String.valueOf(values[values.length - i])).append(", ");
-		} while (--i>1);
-		sb.append(String.valueOf(values[values.length - 1])).append(">");
-		
-		return sb.toString();
+		return String.valueOf(values[0]);
 	}
 	
 	@Override
