@@ -435,7 +435,7 @@ public class Calculator {
 				boolean _isSign=true;	// one-way flag
 				while(--pos >= 0) //while(pos >= 0)
 				{
-					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]== 'P' || chs[pos] == 'E' || chs[pos] >= 'A' && chs[pos] <= 'D')
+					if(chs[pos] >= '0' && chs[pos] <= '9' || (tokenKeys.containsKey(chs[pos]) && (tokenKeys.get(chs[pos]) instanceof mVector || tokenKeys.get(chs[pos]) instanceof Storage)))
 					{
 						_isSign=false;
 						break;
@@ -470,7 +470,10 @@ public class Calculator {
 				{
 					IMathExp ins = tokenKeys.get(stack.peek());
 					IMathExp exp = tokenKeys.get(chs[i]);
-					if (exp.getPriority() < ins.getPriority())
+					if(exp instanceof AssignmentDelimitor)
+						while (stack.size() > 0)
+							sb.append(" " + stack.pop());
+					else if (exp.getPriority() < ins.getPriority())
 						sb.append(" " + stack.pop());
 				}
 				stack.push(chs[i]);
