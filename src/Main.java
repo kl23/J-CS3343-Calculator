@@ -10,7 +10,7 @@ public class Main {
 	{
 		
 		Scanner sn = new Scanner(System.in);
-		Calculator calc = new Calculator();
+		final Calculator calc = new Calculator();
 		
 		Map<String, ICommand> commandList = new HashMap<>();
 		commandList.put("angle", new ICommand() {

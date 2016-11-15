@@ -435,7 +435,7 @@ public class Calculator {
 				boolean _isSign=true;	// one-way flag
 				while(--pos >= 0) //while(pos >= 0)
 				{
-					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]=='P' || chs[pos]=='E')
+					if(chs[pos] >= '0' && chs[pos] <= '9' || chs[pos]== 'P' || chs[pos] == 'E' || chs[pos] >= 'A' && chs[pos] <= 'D')
 					{
 						_isSign=false;
 						break;
@@ -461,7 +461,7 @@ public class Calculator {
 			}
 			else if (tokenKeys.containsKey(chs[i]))
 			{
-				if(tokenKeys.get(chs[i]) instanceof mVector || tokenKeys.get(chs[i]).getName()=="answer")
+				if(tokenKeys.get(chs[i]) instanceof mVector || tokenKeys.get(chs[i]) instanceof Storage)
 				{
 					sb.append(chs[i]);
 					continue;
